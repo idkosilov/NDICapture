@@ -238,9 +238,8 @@ def window_context(window_name: str) -> Callable[[float], Generator[np.ndarray, 
                 data = get_bitmap_data(bitmap, width, height)
                 dc_memory = buffer_to_numpy_array(data, width, height)
                 yield dc_memory
-        except (FailedCopyDC, FailedGetBitmapData) as err:
+        except (FailedCopyDC, FailedGetBitmapData):
             cleanup(compatible_dc, bitmap, hwnd, hdc)
-            logger.exception(f"Error occurred: {err!r}")
             raise
         finally:
             yield None

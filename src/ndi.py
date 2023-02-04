@@ -1,7 +1,11 @@
+import logging
 from contextlib import contextmanager
 from typing import Generator
 
 import NDIlib as ndi_lib
+
+
+logger = logging.getLogger(__name__)
 
 
 class FailedInitializeNDI(Exception):
@@ -22,6 +26,8 @@ def context(ndi_output_name: str) -> Generator:
         if not ndi_lib.initialize():
             raise FailedInitializeNDI("Can't initialize NDI context.")
 
+        logger.info("NDI context initialized")
+
         send_settings = ndi_lib.SendCreate()
         send_settings.ndi_name = ndi_output_name
 
@@ -41,7 +47,10 @@ def context(ndi_output_name: str) -> Generator:
         ndi_output_coroutine.send(None)
         yield ndi_output_coroutine
 
-    finally:
-        if ndi_send is not None:
-            ndi_lib.send_destroy(ndi_send)
+    except FailedInitializeNDI:
         ndi_lib.destroy()
+
+    finally:
+        ndi_lib.send_destroy(ndi_send)
+        ndi_lib.destroy()
+        logger.info("NDI context destroyed.")
