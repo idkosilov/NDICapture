@@ -7,7 +7,7 @@ from typing import Tuple, Generator, Callable
 
 import numpy as np
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 
 class FailedToFindWindow(Exception):
@@ -159,8 +159,6 @@ def copy_dc(compatible_dc: int, hdc: int, width: int, height: int) -> None:
         raise FailedCopyDC("Failed to perform a bit-block transfer of the color data corresponding to a rectangle of "
                            "pixels from the specified source device context into a destination device context.")
 
-    logger.info(f"Bitmap was copied to destination device context.")
-
 
 def get_bitmap_data(bitmap: int, width: int, height: int) -> Array[c_char]:
     """
@@ -175,8 +173,6 @@ def get_bitmap_data(bitmap: int, width: int, height: int) -> Array[c_char]:
     result = ctypes.windll.gdi32.GetBitmapBits(bitmap, width * height * 4, data)
     if result == 0:
         raise FailedGetBitmapData("Failed to retrieve the bits of the specified device-independent bitmap")
-
-    logger.info(f"Bitmap was copied to data buffer.")
 
     return data
 
@@ -245,4 +241,3 @@ def window_context(window_name: str) -> Callable[[float], Generator[np.ndarray, 
             yield None
 
     yield frame_buffer
-

@@ -1,12 +1,14 @@
 import argparse
-import logging
+import logging.config
 from time import sleep
 from typing import Tuple
 
 import win_api
 import ndi
 
-logger = logging.getLogger(__name__)
+logging.config.fileConfig("logging.conf")
+
+logger = logging.getLogger()
 
 
 def handle_command_line() -> Tuple[str, str]:

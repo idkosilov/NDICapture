@@ -4,8 +4,7 @@ from typing import Generator
 
 import NDIlib as ndi_lib
 
-
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 
 class FailedInitializeNDI(Exception):
