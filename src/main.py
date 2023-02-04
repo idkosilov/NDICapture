@@ -5,8 +5,7 @@ from typing import Tuple
 
 import win_api
 import ndi
-
-logging.config.fileConfig("logging.conf")
+import logging_config
 
 logger = logging.getLogger()
 
