@@ -1,9 +1,8 @@
 import argparse
 from typing import Tuple
 
-import NDIlib as ndi
-
 import win_api
+import ndi
 
 
 def handle_command_line() -> Tuple[str, str]:
@@ -29,22 +28,11 @@ def capture_frames_and_send_to_ndi(window_name: str, ndi_output_name) -> None:
     :param window_name: the name of the window to be captured
     :param ndi_output_name: the name of the NDI output
     """
-    ndi.initialize()
-    send_settings = ndi.SendCreate()
-    send_settings.ndi_name = ndi_output_name
-
-    ndi_send = ndi.send_create(send_settings)
-
-    video_frame = ndi.VideoFrameV2(FourCC=ndi.FOURCC_VIDEO_TYPE_BGRA)
-
-    try:
-        with win_api.window_context(window_name) as frame_buffer:
+    with win_api.window_context(window_name) as frame_buffer:
+        with ndi.context(ndi_output_name) as ndi_output:
             for frame in frame_buffer():
-                video_frame.data = frame
-                ndi.send_send_video_v2(ndi_send, video_frame)
-    finally:
-        ndi.send_destroy(ndi_send)
-        ndi.destroy()
+                if frame is not None:
+                    ndi_output.send(frame)
 
 
 def main() -> None:
