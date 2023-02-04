@@ -1,8 +1,12 @@
 import argparse
+import logging
+from time import sleep
 from typing import Tuple
 
 import win_api
 import ndi
+
+logger = logging.getLogger(__name__)
 
 
 def handle_command_line() -> Tuple[str, str]:
@@ -37,7 +41,14 @@ def capture_frames_and_send_to_ndi(window_name: str, ndi_output_name) -> None:
 
 def main() -> None:
     window_name, ndi_output_name = handle_command_line()
-    capture_frames_and_send_to_ndi(window_name, ndi_output_name)
+
+    while True:
+        try:
+            capture_frames_and_send_to_ndi(window_name, ndi_output_name)
+        except Exception as err:
+            logger.error(f"Error occurred: {err}")
+            logger.info("Trying to recreate context in 5 seconds...")
+            sleep(5)
 
 
 if __name__ == "__main__":
