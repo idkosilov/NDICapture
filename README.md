@@ -29,12 +29,11 @@ Usage
 1.  Select the window or desktop you want to capture and stream.
 2.  Open terminal and run the app:
 
+        WindowCaptureToNDI.exe --window "Graphics Window" --ndi_output "Graphics NDI"
 
-    WindowCaptureToNDI.exe --window "Graphics Window" --ndi_output "Graphics NDI"
+3.  For help, run:
 
-For help, run:
-    
-    WindowCaptureToNDI.exe -h
+        WindowCaptureToNDI.exe -h
 
 Support
 -------
