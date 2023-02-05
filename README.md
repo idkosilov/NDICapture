@@ -44,4 +44,4 @@ For any questions or issues, please open a new issue on the [issues page](https:
 License
 ---------
 
-This software is released under the MIT license. See the LICENSE file for more information.
+This software is released under the MIT license. See the [LICENSE](https://github.com/idkosilov/window_capture_to_ndi/LICENSE.md) file for more information.
