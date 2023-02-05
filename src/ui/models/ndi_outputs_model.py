@@ -1,8 +1,8 @@
-import multiprocessing
+import subprocess
+import sys
 from typing import Union, Any
 
-from PySide6.QtCore import QAbstractListModel, QObject, QPersistentModelIndex, QModelIndex, Qt, QByteArray, Slot
-from core.main import start_app
+from PySide6.QtCore import QAbstractListModel, QObject, QPersistentModelIndex, QModelIndex, Qt, QByteArray, Slot, Signal
 
 
 class NdiOutput:
@@ -12,14 +12,15 @@ class NdiOutput:
         self.name = name
 
         self._worker = None
+        self._logs_parser = None
         self.is_running = False
 
     def start(self) -> None:
         self.is_running = True
 
-        self._worker = multiprocessing.Process(target=start_app, args=(self.window, self.name))
+        self._worker = subprocess.Popen([sys.executable, "../core/main.py", "-w", self.window, "-n", self.name],
+                                        stderr=subprocess.PIPE)
         self._worker.daemon = True
-        self._worker.start()
 
     def stop(self) -> None:
         self.is_running = False
@@ -78,5 +79,3 @@ class NdiOutputsModel(QAbstractListModel):
         default[NdiOutputsModel.ndiOutputName] = QByteArray(b'ndiOutputName')
         default[NdiOutputsModel.isRunning] = QByteArray(b'isRunning')
         return default
-
-

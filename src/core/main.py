@@ -54,7 +54,7 @@ def start_app(window_name: str, ndi_output_name: str) -> None:
         try:
             capture_frames_and_send_to_ndi(window_name, ndi_output_name)
         except Exception as err:
-            logger.error(f"Error occurred: {err}")
+            logger.error(f"Error occurred: {err!r}")
             logger.info("Trying to recreate context in 5 seconds...")
             sleep(5)
 
