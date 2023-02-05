@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s %(module)s %(funcName)s %(message)s',
                     handlers=[logging.FileHandler("app.log", mode='w'),
                               logging.StreamHandler()])
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 def handle_command_line() -> Tuple[str, str]:
