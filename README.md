@@ -40,3 +40,8 @@ Support
 -------
 
 For any questions or issues, please open a new issue on the [issues page](https://github.com/idkosilov/window_capture_to_ndi/issues) or send an email to [idkosilov@gmail.com](mailto:idkosilov@gmail.com).
+
+License
+---------
+
+This software is released under the MIT license. See the LICENSE file for more information.
