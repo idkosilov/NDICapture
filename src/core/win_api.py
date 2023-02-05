@@ -3,11 +3,11 @@ import ctypes.wintypes
 import logging
 from contextlib import contextmanager
 from ctypes import Array, c_char
-from typing import Tuple, Generator, Callable
+from typing import Tuple, Generator, Callable, List
 
 import numpy as np
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 class FailedToFindWindow(Exception):
@@ -241,3 +241,28 @@ def window_context(window_name: str) -> Callable[[float], Generator[np.ndarray, 
             yield None
 
     yield frame_buffer
+
+
+EnumWindowsProc = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+
+
+def get_windows_titles() -> List[str]:
+    """
+    Returns a list of the titles of all visible windows in the system.
+    """
+    windows_titles = []
+
+    def foreach_window(hwnd: int, _) -> bool:
+        """
+        Callback function for the EnumWindows function.
+        """
+        # if ctypes.windll.user32.IsWindowVisible(hwnd):
+        length = ctypes.windll.user32.GetWindowTextLengthW(hwnd)
+        buff = ctypes.create_unicode_buffer(length + 1)
+        ctypes.windll.user32.GetWindowTextW(hwnd, buff, length + 1)
+        if buff.value != '':
+            windows_titles.append(buff.value)
+        return True
+
+    ctypes.windll.user32.EnumWindows(EnumWindowsProc(foreach_window), 0)
+    return windows_titles
