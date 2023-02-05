@@ -43,9 +43,13 @@ def capture_frames_and_send_to_ndi(window_name: str, ndi_output_name) -> None:
                     ndi_output.send(frame)
 
 
-def main() -> None:
-    window_name, ndi_output_name = handle_command_line()
+def start_app(window_name: str, ndi_output_name: str) -> None:
+    """
+    Start the main application loop that captures the frames from the specified window and sends it to NDI.
 
+    :param window_name: the name of the window to be captured
+    :param ndi_output_name: the name of the NDI output
+    """
     while True:
         try:
             capture_frames_and_send_to_ndi(window_name, ndi_output_name)
@@ -53,6 +57,11 @@ def main() -> None:
             logger.error(f"Error occurred: {err}")
             logger.info("Trying to recreate context in 5 seconds...")
             sleep(5)
+
+
+def main() -> None:
+    window_name, ndi_output_name = handle_command_line()
+    start_app(window_name, ndi_output_name)
 
 
 if __name__ == "__main__":

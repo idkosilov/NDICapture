@@ -246,22 +246,22 @@ def window_context(window_name: str) -> Callable[[float], Generator[np.ndarray, 
 EnumWindowsProc = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
 
 
-def get_windows_titles() -> List[str]:
+def get_windows_titles():
     """
     Returns a list of the titles of all visible windows in the system.
     """
     windows_titles = []
 
-    def foreach_window(hwnd: int, _) -> bool:
+    def foreach_window(hwnd, _):
         """
         Callback function for the EnumWindows function.
         """
-        # if ctypes.windll.user32.IsWindowVisible(hwnd):
-        length = ctypes.windll.user32.GetWindowTextLengthW(hwnd)
-        buff = ctypes.create_unicode_buffer(length + 1)
-        ctypes.windll.user32.GetWindowTextW(hwnd, buff, length + 1)
-        if buff.value != '':
-            windows_titles.append(buff.value)
+        if ctypes.windll.user32.IsWindowVisible(hwnd):
+            length = ctypes.windll.user32.GetWindowTextLengthW(hwnd)
+            buff = ctypes.create_unicode_buffer(length + 1)
+            ctypes.windll.user32.GetWindowTextW(hwnd, buff, length + 1)
+            if buff.value != '':
+                windows_titles.append(buff.value)
         return True
 
     ctypes.windll.user32.EnumWindows(EnumWindowsProc(foreach_window), 0)
