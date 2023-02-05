@@ -3,8 +3,7 @@ import logging
 from time import sleep
 from typing import Tuple
 
-import win_api
-import ndi
+from core import win_api, ndi
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s %(module)s %(funcName)s %(message)s',
