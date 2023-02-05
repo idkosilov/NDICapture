@@ -9,6 +9,7 @@ Features
 *   Capture and stream a specific window or desktop.
 *   Easy to use command-line interface.
 *   Compatible with NDI-enabled software and hardware.
+*   Supports capture of windows with alpha channel.
 
 Requirements
 ------------
