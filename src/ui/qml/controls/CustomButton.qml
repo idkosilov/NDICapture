@@ -5,6 +5,7 @@ Button {
     id: butoon
     implicitWidth: 100
     implicitHeight: 50
+    hoverEnabled: false
 
     text: qsTr("Single")
 

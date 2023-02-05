@@ -126,6 +126,8 @@ Window {
 
                     CustomComboBox {
                         id: windowComboBox
+                        textRole: "windowName"
+                        model: windowsModel
                         width: 140
                         height: 25
                         anchors.verticalCenter: parent.verticalCenter
@@ -178,6 +180,7 @@ Window {
                         text: qsTr("Add")
                         Layout.fillHeight: true
                         Layout.fillWidth: true
+                        onClicked: ndiOutputsModel.add(windowComboBox.currentText ,ndiOutputField.text)
                     }
 
                     CustomButton {
@@ -187,6 +190,7 @@ Window {
                         text: qsTr("Remove")
                         Layout.fillHeight: true
                         Layout.fillWidth: true
+                        onClicked: ndiOutputsModel.remove(ndiOutputsView.currentIndex)
                     }
                 }
             }
@@ -209,23 +213,15 @@ Window {
                 font.bold: true
             }
 
-            ListModel {
-                    id: ndiOutputsModel
-                    ListElement { name: "Alice" }
-                    ListElement { name: "Bob" }
-                    ListElement { name: "Jane" }
-                    ListElement { name: "Harry" }
-                    ListElement { name: "Wendy" }
-                }
-
             Component {
                 id: ndiOutputDelegate
 
                 Text {
                     readonly property ListView __lv: ListView.view
+                    property variant instance: model
 
                     height: 25
-                    text: model.name
+                    text: model.ndiOutputName
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.leftMargin: 5
@@ -273,6 +269,18 @@ Window {
                         anchors { left: parent.left; right: parent.right;}
                         color: "#BFBEE3"
                     }
+
+                    onCurrentIndexChanged: {
+                        var isRunning = ndiOutputsView.currentItem.instance.isRunning
+                        if (isRunning) {
+                            startStopButton.text = qsTr("Stop")
+                        } else {
+                            startStopButton.text = qsTr("Start")
+                        }
+
+                        windowComboBox.currentIndex = windowComboBox.find(ndiOutputsView.currentItem.instance.windowName)
+                        ndiOutputField.text = ndiOutputsView.currentItem.instance.ndiOutputName
+                    }
                 }
             }
 
@@ -280,7 +288,7 @@ Window {
                 id: startStopButton
                 y: 472
                 height: 30
-                text: qsTr("Start")
+                text: "Start"
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
@@ -289,6 +297,15 @@ Window {
                 anchors.rightMargin: 5
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                onClicked: {
+                    ndiOutputsModel.startStop(ndiOutputsView.currentIndex)
+                    var isRunning = ndiOutputsView.currentItem.instance.isRunning
+                    if (isRunning) {
+                        startStopButton.text = qsTr("Stop")
+                    } else {
+                        startStopButton.text = qsTr("Start")
+                    }
+                }
             }
         }
 
